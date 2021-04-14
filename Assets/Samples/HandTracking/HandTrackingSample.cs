@@ -77,7 +77,7 @@ public class HandTrackingSample : MonoBehaviour
         DrawFrames(palmResults);
 
         if (landmarkResult == null || landmarkResult.score < 0.2f) return;
-        DrawCropMatrix(landmarkDetect.CropMatrix);
+        //DrawCropMatrix(landmarkDetect.CropMatrix);
         DrawJoints(landmarkResult.joints);
     }
 
@@ -119,16 +119,16 @@ public class HandTrackingSample : MonoBehaviour
         Vector3 max = rtCorners[2];
 
         draw.color = Color.green;
-        foreach (var palm in palms)
-        {
-            draw.Rect(MathTF.Lerp(min, max, palm.rect, true), 0.02f, min.z);
+        //foreach (var palm in palms)
+        //{
+        //    draw.Rect(MathTF.Lerp(min, max, palm.rect, true), 0.02f, min.z);
 
-            foreach (var kp in palm.keypoints)
-            {
-                draw.Point(MathTF.Lerp(min, max, (Vector3)kp, true), 0.05f);
-            }
-        }
-        draw.Apply();
+        //    foreach (var kp in palm.keypoints)
+        //    {
+        //        draw.Point(MathTF.Lerp(min, max, (Vector3)kp, true), 0.05f);
+        //    }
+        //}
+        //draw.Apply();
     }
 
     void DrawCropMatrix(in Matrix4x4 matrix)
@@ -145,8 +145,8 @@ public class HandTrackingSample : MonoBehaviour
         Vector3 c = MathTF.LerpUnclamped(min, max, mtx.MultiplyPoint3x4(new Vector3(1, 1, 0)));
         Vector3 d = MathTF.LerpUnclamped(min, max, mtx.MultiplyPoint3x4(new Vector3(0, 1, 0)));
 
-        draw.Quad(a, b, c, d, 0.02f);
-        draw.Apply();
+        //draw.Quad(a, b, c, d, 0.02f);
+        //draw.Apply();
     }
 
     void DrawJoints(Vector3[] joints)
@@ -170,21 +170,26 @@ public class HandTrackingSample : MonoBehaviour
             worldJoints[i] = p1;
         }
 
+        
+        Vector3 colarJoint = worldJoints[9]*0.5f+worldJoints[10]*0.5f ;
+        Vector3 palmJoint = worldJoints[0]*0.5f+worldJoints[9]*0.5f ;
+
         // Cube
         for (int i = 0; i < HandLandmarkDetect.JOINT_COUNT; i++)
         {
-            draw.Cube(worldJoints[i], 0.1f);
+            draw.Cube(palmJoint, 0.1f);
+            draw.Cube(colarJoint, 0.1f);
         }
 
         // Connection Lines
-        var connections = HandLandmarkDetect.CONNECTIONS;
-        for (int i = 0; i < connections.Length; i += 2)
-        {
-            draw.Line3D(
-                worldJoints[connections[i]],
-                worldJoints[connections[i + 1]],
-                0.05f);
-        }
+        //var connections = HandLandmarkDetect.CONNECTIONS;
+        //for (int i = 0; i < connections.Length; i += 2)
+        //{
+        //  draw.Line3D(
+        //        worldJoints[connections[i]],
+        //        worldJoints[connections[i + 1]],
+        //        0.05f);
+        //}
 
         draw.Apply();
     }
